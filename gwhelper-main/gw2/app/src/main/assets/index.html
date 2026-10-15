@@ -873,8 +873,16 @@ function refit(){
     if(pin||(lineM&&ok(me)&&ok(en)))pinR(q,me,en);fin(q);return q}; // округляем модель, потом привязываем заново
   const okN=q=>ends.every(p=>!p||Math.abs(F(q,p.x)-p.y)<=.005)&&pts.every(p=>Math.abs(F(q,p.x)-F(ref,p.x))<.05);
   let n=$('prec').value,used='все';
-  if(n==='auto'){for(let k=2;k<=9;k++){r=build(k);used=k;if(okN(r))break}}
-  else{r=build(+n);if(+n>0)used=n}
+  if (lineM) {
+    r = cloneR(base);
+    fin(r);
+    used = 'все (без округления)';
+  } else if(n==='auto'){
+    for(let k=2;k<=9;k++){r=build(k);used=k;if(okN(r))break}
+  } else {
+    r=build(+n);
+    if(+n>0)used=n;
+  }
   S.fit=x=>F(r,x);S.gwText=gw(r).replace(/ /g,'');
   let dtxt='';
   if(S.ode){dtxt=dForm(r,/^\d+$/.test(String(used))?+used:0);S.gwText=dtxt.replace(/ /g,'')}
